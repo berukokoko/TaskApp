@@ -1,5 +1,7 @@
 package jp.techacademy.rin.andou.taskapp;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -95,6 +97,8 @@ public class InputActivity extends AppCompatActivity {
         mTask = realm.where(Task.class).equalTo("id", taskId).findFirst();
         realm.close();
 
+
+        //もしmTaskがなかったら、
         if (mTask == null) {
             // 新規作成の場合
             Calendar calendar = Calendar.getInstance();
@@ -103,7 +107,9 @@ public class InputActivity extends AppCompatActivity {
             mDay = calendar.get(Calendar.DAY_OF_MONTH);
             mHour = calendar.get(Calendar.HOUR_OF_DAY);
             mMinute = calendar.get(Calendar.MINUTE);
-        } else {
+        }
+        //もしそうでなかったら
+        else {
             // 更新の場合
             mTitleEdit.setText(mTask.getTitle());
             mContentEdit.setText(mTask.getContents());
@@ -132,6 +138,7 @@ public class InputActivity extends AppCompatActivity {
             // 新規作成の場合
             mTask = new Task();
 
+            //
             RealmResults<Task> taskRealmResults = realm.where(Task.class).findAll();
 
             int identifier;
@@ -156,5 +163,17 @@ public class InputActivity extends AppCompatActivity {
         realm.commitTransaction();
 
         realm.close();
+
+        Intent resultIntent = new Intent(getApplicationContext(), TaskAlarmReceiver.class);
+        resultIntent.putExtra(MainActivity.EXTRA_TASK, mTask.getId());
+        PendingIntent resultPendingIntent = PendingIntent.getBroadcast(
+                this,
+                mTask.getId(),
+                resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), resultPendingIntent);
     }
 }

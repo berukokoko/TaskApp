@@ -49,4 +49,7 @@
         android:layout_alignParentRight="true"
         android:text="決定" />
 
+
+
+
 </RelativeLayout>

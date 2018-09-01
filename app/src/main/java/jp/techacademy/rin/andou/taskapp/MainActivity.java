@@ -22,6 +22,8 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 public class MainActivity extends AppCompatActivity {
+
+    //EXTRA_TASKを設定。
     public final static String EXTRA_TASK = "jp.techacademy.rin.andou.taskapp.TASK";
 
     private Realm mRealm;
@@ -37,7 +39,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
+
+
+
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //
     private void reloadListView() {
         // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
         RealmResults<Task> taskRealmResults = mRealm.where(Task.class).findAll().sort("date", Sort.DESCENDING);
@@ -132,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         mTaskAdapter.notifyDataSetChanged();
     }
 
+    //
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -10,9 +10,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.Date;
 
@@ -25,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
 
     //EXTRA_TASKを設定。
     public final static String EXTRA_TASK = "jp.techacademy.rin.andou.taskapp.TASK";
+
+    TextView TextView1;
+    EditText EditText1;
+
+
 
     private Realm mRealm;
     private RealmChangeListener mRealmListener = new RealmChangeListener() {
@@ -44,8 +53,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        //インスタンス化
 
+        TextView1 = (TextView) findViewById(R.id.TextView1);
+        EditText1 = (EditText) findViewById(R.id.EditText1);
+        Button button1 = (Button) findViewById(R.id.Button1);
 
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("UI_PARTS", "ボタンをタップしました");
+                TextView1.setText(EditText1.getText().toString());
+                //ここ
+                // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
+                RealmResults<Task> taskRealmResults = mRealm.where(Task.class).equalTo("Category",EditText1.getText().toString() ).findAll();
+                // 上記の結果を、TaskList としてセットする
+                mTaskAdapter.setTaskList(mRealm.copyFromRealm(taskRealmResults));
+                // TaskのListView用のアダプタに渡す
+                mListView.setAdapter(mTaskAdapter);
+                // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+                mTaskAdapter.notifyDataSetChanged();
+            }
+        });
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -160,4 +189,5 @@ public class MainActivity extends AppCompatActivity {
         mRealm.copyToRealmOrUpdate(task);
         mRealm.commitTransaction();
     }
+
 }

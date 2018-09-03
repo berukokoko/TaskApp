@@ -26,6 +26,8 @@ public class InputActivity extends AppCompatActivity {
     private Button mDateButton, mTimeButton;
     private EditText mTitleEdit, mContentEdit;
     private Task mTask;
+    //カテゴリーメンバ変数
+
     private View.OnClickListener mOnDateClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -89,6 +91,7 @@ public class InputActivity extends AppCompatActivity {
         findViewById(R.id.done_button).setOnClickListener(mOnDoneClickListener);
         mTitleEdit = (EditText)findViewById(R.id.title_edit_text);
         mContentEdit = (EditText)findViewById(R.id.content_edit_text);
+        //カテゴリー
 
         // EXTRA_TASK から Task の id を取得して、 id から Task のインスタンスを取得する
         Intent intent = getIntent();
@@ -155,8 +158,9 @@ public class InputActivity extends AppCompatActivity {
         String content = mContentEdit.getText().toString();
 
         mTask.setTitle(title);
-        mTask.setContents(content);
-        GregorianCalendar calendar = new GregorianCalendar(mYear,mMonth,mDay,mHour,mMinute);
+        mTask.setContents(content);//フィールドに設定
+        //カテゴリーに設定
+        GregorianCalendar calendar = new GregorianCalendar(mYear,mMonth,mDay,mHour,mMinute);//直接Dateを作れないため。次で渡すため。
         Date date = calendar.getTime();
         mTask.setDate(date);
 
@@ -165,6 +169,7 @@ public class InputActivity extends AppCompatActivity {
 
         realm.close();
 
+        //通知　アラームレシーバー　タスクの情報を渡して　ステータスバーがでる処理をしている、
         Intent resultIntent = new Intent(getApplicationContext(), TaskAlarmReceiver.class);
         resultIntent.putExtra(MainActivity.EXTRA_TASK, mTask.getId());
         PendingIntent resultPendingIntent = PendingIntent.getBroadcast(
@@ -173,6 +178,7 @@ public class InputActivity extends AppCompatActivity {
                 resultIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
+
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), resultPendingIntent);

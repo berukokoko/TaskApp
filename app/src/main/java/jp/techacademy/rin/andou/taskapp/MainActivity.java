@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 TextView1.setText(EditText1.getText().toString());
                 //ここ
                 // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
-                RealmResults<Task> taskRealmResults = mRealm.where(Task.class).equalTo("Category",EditText1.getText().toString() ).findAll();
+                RealmResults<Task> taskRealmResults = mRealm.where(Task.class).equalTo("category",EditText1.getText().toString() ).findAll();
                 // 上記の結果を、TaskList としてセットする
                 mTaskAdapter.setTaskList(mRealm.copyFromRealm(taskRealmResults));
                 // TaskのListView用のアダプタに渡す

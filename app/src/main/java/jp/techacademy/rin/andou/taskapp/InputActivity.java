@@ -16,9 +16,12 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static java.lang.Integer.valueOf;
 
 public class InputActivity extends AppCompatActivity {
 
@@ -27,6 +30,7 @@ public class InputActivity extends AppCompatActivity {
     private EditText mTitleEdit, mContentEdit;
     private Task mTask;
     //カテゴリーメンバ変数
+    private EditText category;
 
     private View.OnClickListener mOnDateClickListener = new View.OnClickListener() {
         @Override
@@ -92,13 +96,17 @@ public class InputActivity extends AppCompatActivity {
         mTitleEdit = (EditText)findViewById(R.id.title_edit_text);
         mContentEdit = (EditText)findViewById(R.id.content_edit_text);
         //カテゴリー
+        category = (EditText)findViewById(R.id.category);
 
         // EXTRA_TASK から Task の id を取得して、 id から Task のインスタンスを取得する
         Intent intent = getIntent();
+        //int taskId = intent.getIntExtra(MainActivity.EXTRA_TASK, -1);
         int taskId = intent.getIntExtra(MainActivity.EXTRA_TASK, -1);
+        taskId = valueOf(taskId);
         Realm realm = Realm.getDefaultInstance();
         //mTask = realm.where(Task.class).equalTo("id", taskId).findFirst();
         mTask = realm.where(Task.class).equalTo("category", taskId).findFirst();
+
         realm.close();
 
 
@@ -117,6 +125,7 @@ public class InputActivity extends AppCompatActivity {
             // 更新の場合
             mTitleEdit.setText(mTask.getTitle());
             mContentEdit.setText(mTask.getContents());
+            category.setText(mTask.getContents());
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(mTask.getDate());
@@ -156,9 +165,15 @@ public class InputActivity extends AppCompatActivity {
 
         String title = mTitleEdit.getText().toString();
         String content = mContentEdit.getText().toString();
+        String cate = category.getText().toString();
 
         mTask.setTitle(title);
         mTask.setContents(content);//フィールドに設定
+
+        //
+        mTask.setTitle(cate);
+        mTask.setContents(cate);
+
         //カテゴリーに設定
         GregorianCalendar calendar = new GregorianCalendar(mYear,mMonth,mDay,mHour,mMinute);//直接Dateを作れないため。次で渡すため。
         Date date = calendar.getTime();

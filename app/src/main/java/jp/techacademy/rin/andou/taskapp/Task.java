@@ -49,7 +49,12 @@ public class Task extends RealmObject implements Serializable {
         this.id = id;
     }
 
-    public String category() {
+    //Category
+    public String getcategory() {
         return category;
+    }
+
+    public void setcategory(String category) {
+        this.category = category;
     }
 }

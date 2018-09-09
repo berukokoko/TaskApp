@@ -173,6 +173,7 @@ public class InputActivity extends AppCompatActivity {
         //
         mTask.setTitle(cate);
         mTask.setContents(cate);
+        mTask.setCategory(cate);
 
         //カテゴリーに設定
         GregorianCalendar calendar = new GregorianCalendar(mYear,mMonth,mDay,mHour,mMinute);//直接Dateを作れないため。次で渡すため。

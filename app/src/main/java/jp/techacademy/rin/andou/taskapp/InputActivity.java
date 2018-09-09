@@ -104,8 +104,8 @@ public class InputActivity extends AppCompatActivity {
         int taskId = intent.getIntExtra(MainActivity.EXTRA_TASK, -1);
         taskId = valueOf(taskId);
         Realm realm = Realm.getDefaultInstance();
-        //mTask = realm.where(Task.class).equalTo("id", taskId).findFirst();
-        mTask = realm.where(Task.class).equalTo("category", taskId).findFirst();
+        mTask = realm.where(Task.class).equalTo("id", taskId).findFirst();
+        //mTask = realm.where(Task.class).equalTo("category", taskId).findFirst();
 
         realm.close();
 

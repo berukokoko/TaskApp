@@ -125,7 +125,7 @@ public class InputActivity extends AppCompatActivity {
             // 更新の場合
             mTitleEdit.setText(mTask.getTitle());
             mContentEdit.setText(mTask.getContents());
-            category.setText(mTask.getContents());
+            category.setText(mTask.getCategory());
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(mTask.getDate());
